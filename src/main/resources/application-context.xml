@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+    <bean name="xmlAudience" class="com.ed.springaoplearning.aspect.XMLAudience"/>
+    <bean name="xmlAroundAudience" class="com.ed.springaoplearning.aspect.XMLAroundAudience"/>
+
+    <aop:config>
+        <!-- 切点 -->
+        <aop:pointcut id="performance"
+                      expression="execution(* com.ed.springaoplearning.action.Performance.perform(..))"/>
+        <!-- 切面 -->
+        <aop:aspect ref="xmlAudience">
+            <!-- 前置通知 -->
+            <aop:before pointcut-ref="performance" method="takeSeats"/>
+            <aop:before pointcut-ref="performance" method="silenceCellPhone"/>
+            <!-- 后置通知 -->
+            <aop:after-returning pointcut-ref="performance" method="applause"/>
+            <!-- 异常通知 -->
+            <aop:after-throwing pointcut-ref="performance" method="demandRefund"/>
+        </aop:aspect>
+        <!-- 声明环绕通知的切面 -->
+        <aop:aspect ref="xmlAroundAudience">
+            <aop:around pointcut-ref="performance" method="watchPerformance"/>
+        </aop:aspect>
+
+
+    </aop:config>
+</beans>
